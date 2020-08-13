@@ -1,0 +1,31 @@
+#!/usr/bin/python
+import kubernetes
+import json
+import datetime
+
+kubernetes.config.load_kube_config()
+
+cert_api = kubernetes.client.apis.certificates_v1beta1_api.CertificatesV1beta1Api()
+
+stream = kubernetes.watch.Watch().stream(cert_api.list_certificate_signing_request)
+for csr in stream:
+  #print(json.dumps(csr))
+  csrmeta = csr['object'].metadata.to_dict()
+
+
+  print("\n\nName={}\n\n".format(csrmeta['name']))
+
+  #    creationTimestamp: "2020-08-13T20:26:07Z"
+ 
+  approval = kubernetes.client.models.v1beta1_certificate_signing_request_condition.V1beta1CertificateSigningRequestCondition(
+             type='Approved',
+             reason='AutoApprover',
+             last_update_time=datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+           )
+  csr['object'].status.conditions = [approval]
+
+  rc = cert_api.replace_certificate_signing_request_approval(csrmeta['name'],csr['object'])
+
+  # print('\nResult={}'.format(json.dumps(rc)))
+
+
