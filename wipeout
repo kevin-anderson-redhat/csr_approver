@@ -1,0 +1,15 @@
+#!/bin/bash
+oc adm drain node3.$GUID.internal  --force=true --ignore-daemonsets=true
+sleep 10
+oc delete node node3.$GUID.internal
+sleep 10
+ssh node3.$GUID.internal sudo rm -fv \
+          /etc/origin/node/node-config.yaml \
+         /etc/origin/node/node.kubeconfig  \
+         /etc/origin/node/tmp/node-config.yaml
+ssh -t node3.$GUID.internal 'sudo find /etc/origin/node/certificates -type l -exec unlink {} \;'
+ssh -t node3.$GUID.internal 'sudo find /etc/origin/node/certificates -type f -exec rm -fv {} \;'
+ssh -t node3.$GUID.internal sudo reboot
+watch oc get csr 
+# oc get csr -o custom-columns=C:.metadata.name --no-headers
+
