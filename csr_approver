@@ -2,8 +2,12 @@
 import kubernetes
 import json
 import datetime
+import os, sys
 
-kubernetes.config.load_kube_config()
+if 'KUBERNETES_PORT' in os.eviron:
+    kubernetes.config.load_incluster_config()
+else:
+    kubernetes.config.load_kube_config()
 
 cert_api = kubernetes.client.apis.certificates_v1beta1_api.CertificatesV1beta1Api()
 
