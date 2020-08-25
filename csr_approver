@@ -2,9 +2,10 @@
 import kubernetes
 import json
 import datetime
-import os, sys
+import os
+import sys
 
-if 'KUBERNETES_PORT' in os.eviron:
+if 'KUBERNETES_PORT' in os.environ:
     kubernetes.config.load_incluster_config()
 else:
     kubernetes.config.load_kube_config()
