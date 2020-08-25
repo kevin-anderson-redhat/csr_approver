@@ -1,2 +1,2 @@
 #
-kubernetes=1.11
+kubernetes>=1.11,<1.12
