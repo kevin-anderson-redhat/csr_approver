@@ -1,5 +1,6 @@
 FROM registry.redhat.io/rhel7:7.8
 USER root
+RUN pwd
 COPY rhsm/ /etc/rhsm/
 COPY entitlements/ /etc/pki/entitlements
 RUN subscription-manager repos --enable=rhel-7-server-ose-3.11-rpms
