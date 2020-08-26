@@ -1,5 +1,4 @@
 FROM registry.redhat.io/rhel7:7.8
-USER root
 RUN rm /etc/rhsm-host
 RUN subscription-manager repos --enable=rhel-7-server-ose-3.11-rpms
 RUN subscription-manager repos --enable=rhel-7-server-extras-rpms
