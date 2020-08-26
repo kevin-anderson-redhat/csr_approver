@@ -1,7 +1,8 @@
 FROM registry.redhat.io/rhel7:7.8
-RUN whoami 
-RUN rm /etc/rhsm-host
-RUN cp /var/run/secrets/etc-pki-entitlement/ /etc/pki/entitlement
+USER root
+RUN unlink /etc/rhsm-host
+COPY rhsm-conf /etc/rhsm/rhsm.conf
+COPY rhsm-ca /etc/rhsm/ca/redhat-uep.pem
 RUN subscription-manager repos --enable=rhel-7-server-ose-3.11-rpms
 RUN subscription-manager repos --enable=rhel-7-server-extras-rpms
 RUN yum install -y python2 python2-openshift python2-kubernetes 
