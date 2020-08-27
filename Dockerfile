@@ -6,7 +6,7 @@ USER root
 RUN yum repolist --disablerepo=*
 
 RUN yum-config-manager --enable rhel-7-server-extras-rpms --enable rhel-7-server-ose-3.11-rpms 
-RUN yum install -y python python2-openshift python2-kubernetes
+RUN yum install --disableplugin=search-disabled-repos -y python python2-openshift python2-kubernetes
 #
 # The following rpm q ensures that the build fails if the rpms above were not installed
 #
