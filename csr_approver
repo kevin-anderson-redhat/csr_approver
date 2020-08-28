@@ -5,41 +5,86 @@ import datetime
 import os
 import sys
 
-if 'KUBERNETES_PORT' in os.environ:
-    print("Found KUBERNETES_PORT - Loading cluster config")
-    kubernetes.config.load_incluster_config()
-else:
-    print("Did not find KUBERNETES_PORT -Loading kube config")
-    kubernetes.config.load_kube_config()
-    k8s_config = kubernetes.client.Configuration()
-    k8s_config.assert_hostname = False
+class CSR_Approver
+    #
+    #
+    #
+    def __init__(self):
+        #
+        # Allow the following default overrides taken from environment variables
+        #
+        self.api_group=os.getenv('CSR_APPRVR_API_GROUP','secpaas.naps.rht')
+        self.api_version=os.getenv('CSR_APPRVR_API_VERSION','v1alpha')
+        self.api_namespace=os.getenv('CSR_APPRVR_NAMESPACE','csr-approver'),
+        self.api_kind=os.getenv('CSR_APPRVR_KIND','tenantsubnets')
+    
+        #
+        # Initialize the K8s APIs
+        #
+        if 'KUBERNETES_PORT' in os.environ:
+            print("Found KUBERNETES_PORT - Loading cluster config")
+            kubernetes.config.load_incluster_config()
+        else:
+            print("Did not find KUBERNETES_PORT -Loading kube config")
+            kubernetes.config.load_kube_config()
+            self.k8s_config = kubernetes.client.Configuration()
+            self.k8s_config.assert_hostname = False
+    
+        self.cert_api = kubernetes.client.apis.CertificatesV1beta1Api()
+    
+        self.custom_obj_api = kubernetes.client.apis.CustomObjectsApi()
+  
+    #
+    #
+    #
+    def ip_belongs_to_tenant(ip):
+        tenant_subnets = cobjapi.list_namespaced_custom_object(self.api_group,
+                                                               self.api_version,
+                                                               self.api_namespace,
+                                                               self.api_kind
+                                                              ).get('items')
+        for tn in tenant_subnets:
+            print("{} {}".format(tn['metadata']['name'],tn['spec']['subnet']))
+  
+  
+  
+    #
+    #
+    #
+    def approve_csrs():
+        print("Looking for CSRs")
+        stream = kubernetes.watch.Watch().stream(cert_api.list_certificate_signing_request)
+        for csr in stream:
+            csrmeta = csr['object'].metadata.to_dict()
 
-
-if 'KUBERNETES_PORT' in os.environ:
-    cert_api = kubernetes.client.apis.certificates_v1beta1_api.CertificatesV1beta1Api()
-else:
-    cert_api = kubernetes.client.apis.CertificatesV1beta1Api()
-
-print("CSR watch starting")
-stream = kubernetes.watch.Watch().stream(cert_api.list_certificate_signing_request)
-for csr in stream:
-  #print(json.dumps(csr))
-  csrmeta = csr['object'].metadata.to_dict()
-  update_time=datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-  print("{}: Found at {}".format(csrmeta['name'], update_time))
-
-  #    creationTimestamp: "2020-08-13T20:26:07Z"
+            update_time=datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+            print("{}: Found at {}".format(csrmeta['name'], update_time))
+         
+            csr_user, csr_host = self.get_csr_user_and_host(csrmeta)
  
-  approval = kubernetes.client.models.v1beta1_certificate_signing_request_condition.V1beta1CertificateSigningRequestCondition(
-             type='Approved',
-             reason='AutoApprover',
-             last_update_time=datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-           )
-  csr['object'].status.conditions = [approval]
+            if self.valid_request(csr_user, csr_host):
+                approval = kubernetes.client.models.v1beta1_certificate_signing_request_condition.V1beta1CertificateSigningRequestCondition(
+                               type='Approved',
+                               reason='AutoApprover',
+                               last_update_time=datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+                               )
+                csr['object'].status.conditions = [approval]
+              
+                print("{}: Approving".format(csrmeta['name']))
+                rc = cert_api.replace_certificate_signing_request_approval(csrmeta['name'],csr['object'])
+          
+            # print('\nResult={}'.format(json.dumps(rc)))
 
-  print("{}: Approving".format(csrmeta['name']))
-  rc = cert_api.replace_certificate_signing_request_approval(csrmeta['name'],csr['object'])
-
-  # print('\nResult={}'.format(json.dumps(rc)))
 
 
+
+
+for tn in tenant_subnets:
+   print("{} {}".format(tn['metadata']['name'],tn['spec']['subnet']))
+
+def main()
+  csr_approver = CSR_Approver()
+
+
+if __name__ == "__main__":
+   main()
