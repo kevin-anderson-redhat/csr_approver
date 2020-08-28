@@ -1,0 +1,28 @@
+apiVersion: v1
+items:
+- apiVersion: certificates.k8s.io/v1beta1
+  kind: CertificateSigningRequest
+  metadata:
+    creationTimestamp: "2020-08-28T12:49:45Z"
+    name: node-csr-8yksq4kdbxDhwTIYUavbg4I-dur-xUrocP6XGWbQuPI
+    namespace: ""
+    resourceVersion: "480865"
+    selfLink: /apis/certificates.k8s.io/v1beta1/certificatesigningrequests/node-csr-8yksq4kdbxDhwTIYUavbg4I-dur-xUrocP6XGWbQuPI
+    uid: f2ee6d89-e92c-11ea-82fa-1655bc309a47
+  spec:
+    groups:
+    - system:serviceaccounts
+    - system:serviceaccounts:openshift-infra
+    - system:authenticated
+    request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlIN01JR2pBZ0VBTUVFeEZUQVRCZ05WQkFvVERITjVjM1JsYlRwdWIyUmxjekVvTUNZR0ExVUVBeE1mYzNsegpkR1Z0T201dlpHVTZibTlrWlRNdU9XSTJNUzVwYm5SbGNtNWhiREJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5CkF3RUhBMElBQkV2QTRocXFVQUpzTG8xSXNzc2lvNWtUSGxrRFNoN2xkdThPSElVdXJsMDRSMUJud1hTeis4QWEKVEJYYnhUY1BOR2pmQ0xLNksxQjBhYmJYVmxKNTd2bWdBREFLQmdncWhrak9QUVFEQWdOSEFEQkVBaUFJWFpETAp0Ylh0QlJMTVhtSjFFRGZ4NUtzaW5UMVVuMXpVS3kwMGkyeVVFUUlnVXJMbEN4L1dRWXYwU2VBU2hCQ28wNTk4CkEwL3JLMUxTdnNXOXlIdjFnWXM9Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+    uid: 028a27fd-e614-11ea-9dc1-168c0c499901
+    usages:
+    - digital signature
+    - key encipherment
+    - client auth
+    username: system:serviceaccount:openshift-infra:node-bootstrapper
+  status: {}
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

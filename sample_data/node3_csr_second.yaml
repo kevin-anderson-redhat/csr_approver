@@ -1,0 +1,20 @@
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  creationTimestamp: "2020-08-28T12:50:57Z"
+  generateName: csr-
+  name: csr-8thq8
+  resourceVersion: "481059"
+  selfLink: /apis/certificates.k8s.io/v1beta1/certificatesigningrequests/csr-8thq8
+  uid: 1de9a61c-e92d-11ea-82fa-1655bc309a47
+spec:
+  groups:
+  - system:nodes
+  - system:authenticated
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQlBEQ0I0Z0lCQURCQk1SVXdFd1lEVlFRS0V3eHplWE4wWlcwNmJtOWtaWE14S0RBbUJnTlZCQU1USDNONQpjM1JsYlRwdWIyUmxPbTV2WkdVekxqbGlOakV1YVc1MFpYSnVZV3d3V1RBVEJnY3Foa2pPUFFJQkJnZ3Foa2pPClBRTUJCd05DQUFSWG5VNHZ3RUs1YWhpaXpHd2dtZ20xQllXTEduTm1IcXo0RU9NSG4wSU9SRGNQRzZNUTByZmQKclIvSkJkcityMWxGSUR3amxabGxHdlBtUkwxWXcwZDBvRDh3UFFZSktvWklodmNOQVFrT01UQXdMakFzQmdOVgpIUkVFSlRBamdoTnViMlJsTXk0NVlqWXhMbWx1ZEdWeWJtRnNnZ0NIQk1Db0FPMkhCS3dSQUFFd0NnWUlLb1pJCnpqMEVBd0lEU1FBd1JnSWhBSy9VYkVBOGxHaFhiRWt6YTB1N1Y5QSt4RFI1dkJjcTlKdGkvcEExdkhLeEFpRUEKbGUwT1JmUnRIVys0QzN4cDE5ZVVRQ1ZacjlHRDMyTTBhSytXSWIxcmtxdz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
+  username: system:node:node3.9b61.internal
+status: {}
