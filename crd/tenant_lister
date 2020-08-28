@@ -1,0 +1,26 @@
+#!/usr/bin/python
+import kubernetes
+import datetime
+import os
+import sys
+import yaml
+
+if 'KUBERNETES_PORT' in os.environ:
+    print("Loading cluster config - running in pod")
+    kubernetes.config.load_incluster_config()
+else:
+    print("Loading kube config - running outside of k8s")
+    kubernetes.config.load_kube_config()
+    k8s_config = kubernetes.client.Configuration()
+    k8s_config.assert_hostname = False
+
+kubernetes.config.load_kube_config()
+k8s_config = kubernetes.client.Configuration()
+k8s_config.assert_hostname = False
+
+cobjapi = kubernetes.client.apis.CustomObjectsApi()
+
+tenant_subnets = cobjapi.list_namespaced_custom_object('secpaas.naps.rht', 'v1alpha', 'csr-approver', 'tenantsubnets').get('items')
+
+for tn in tenant_subnets:
+   print("{} {}".format(tn['metadata']['name'],tn['spec']['subnet']))

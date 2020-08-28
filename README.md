@@ -11,3 +11,11 @@ oc adm policy add-cluster-role-to-user system:controller:certificate-controller 
 
 
 oc new-build . --strategy=docker
+oc create -f crd/crd_tenant_subnet.yaml 
+oc create -f crd/tenantsubnet.yaml 
+oc get tsub
+----
+NAME         SUBNET
+tenant-one   10.250.0.1/24
+----
+

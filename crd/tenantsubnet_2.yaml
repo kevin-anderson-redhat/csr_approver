@@ -1,0 +1,6 @@
+apiVersion: secpaas.naps.rht/v1alpha
+kind: TenantSubnet
+metadata:
+  name: tenant-two
+spec:
+  subnet: "10.250.1.0/24"

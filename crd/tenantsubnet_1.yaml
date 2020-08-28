@@ -1,0 +1,6 @@
+apiVersion: secpaas.naps.rht/v1alpha
+kind: TenantSubnet
+metadata:
+  name: tenant-one
+spec:
+  subnet: "10.200.0.1/24"
