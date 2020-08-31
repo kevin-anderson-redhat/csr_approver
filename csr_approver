@@ -17,6 +17,8 @@ class CSR_Approver
         self.api_version=os.getenv('CSR_APPRVR_API_VERSION','v1alpha')
         self.api_namespace=os.getenv('CSR_APPRVR_NAMESPACE','csr-approver'),
         self.api_kind=os.getenv('CSR_APPRVR_KIND','tenantsubnets')
+        self.csr_stream = None
+        self.csr_iter = None
     
         #
         # Initialize the K8s APIs
@@ -47,13 +49,24 @@ class CSR_Approver
             print("{} {}".format(tn['metadata']['name'],tn['spec']['subnet']))
   
   
-  
     #
     #
     #
-    def approve_csrs():
-        print("Looking for CSRs")
-        stream = kubernetes.watch.Watch().stream(cert_api.list_certificate_signing_request)
+    def find_csr():
+        if self.csr_stream == None:
+            print("Looking for CSRs")
+            self.csr_stream = kubernetes.watch.Watch().stream(cert_api.list_certificate_signing_request)
+            self.csr_iter = self.csr_stream.iter()
+
+        csr = self.csr_iter.next()
+        if csr == None:
+           self.csr_stream = None
+
+        return csr
+    def rest_of_logic
+        if csr == None:
+        else:
+
         for csr in stream:
             csrmeta = csr['object'].metadata.to_dict()
 
